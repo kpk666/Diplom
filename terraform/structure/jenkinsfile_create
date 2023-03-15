@@ -98,6 +98,7 @@ pipeline {
                         try {
                             sh """
                             export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                            docker version
                             docker ps
                             """
                             DOCKER_UP = true
