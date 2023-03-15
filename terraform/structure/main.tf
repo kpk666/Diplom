@@ -19,7 +19,7 @@ data "aws_key_pair" "selected" {
   include_public_key = true
 }
 
-resource "aws_instance" "kubernetes" {
+resource "aws_instance" "Dockerstation" {
   ami             = data.aws_ami.ubuntu.image_id
   instance_type   = "t2.micro"
   key_name        = data.aws_key_pair.selected.key_name
@@ -28,7 +28,7 @@ resource "aws_instance" "kubernetes" {
   user_data = "${file("init.sh")}"
 
   tags = {
-    Name = "kubernetes"
+    Name = "Docker-station"
   }
 }
 
