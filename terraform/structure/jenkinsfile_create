@@ -19,8 +19,8 @@ pipeline {
         PATH = "${KIND_HOME}:${KUBECTL_HOME}:${env.PATH}"
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
-        PROJECT_FOLDER_PATH = 'diplom/terraform/structure'
-        PROJECT_KIND_FOLDER_PATH = 'diplom/kind'
+        PROJECT_FOLDER_PATH = 'terraform/structure'
+        PROJECT_KIND_FOLDER_PATH = 'kind'
         KUBECONFIG = '/var/jenkins_home/.kube/config'
     }
 
