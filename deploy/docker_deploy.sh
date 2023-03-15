@@ -1,5 +1,8 @@
 # Docker version
-docker version
+sudo docker version
 
 # Docker-compose version
-docker-compose version
+sudo docker-compose version
+
+# Launch docker-compose
+sudo docker-compose up -d
