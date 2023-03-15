@@ -17,10 +17,10 @@ variable "secret_key" {
 
 variable "aws_region_name" {
   type = string
-  default = "us-east-2"
+  default = "us-west-1"
 }
 
 variable "aws_key_pair_name" {
   type = string
-  default = "Astr-key"
+  default = "Ast-key-west"
 }
