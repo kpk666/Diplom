@@ -83,7 +83,7 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_FOLDER_PATH) {
-                        DOCKER_HOST = sh(returnStdout: true, script: "terraform output aws_instance_kube_ip").trim().replaceAll('"','')
+                        DOCKER_HOST = sh(returnStdout: true, script: "terraform output aws_instance_Dockerstation_ip").trim().replaceAll('"','')
                         println DOCKER_HOST
                     }
                 }
