@@ -9,5 +9,5 @@ variable "tags" {
 
 variable "bucket_name" {
   type    = string
-  default = "dos11-student-diplom-project-backend"
+  default = "dos11-student-diplom-project"
 }
