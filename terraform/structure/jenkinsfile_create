@@ -17,6 +17,7 @@ pipeline {
     environment {
         KIND_HOME = tool name: 'kind', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
         KUBECTL_HOME = tool name: 'kubectl', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+        DOCKER-COMPOSE_HOME = tool name: 'docker-compose', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
         PATH = "${KIND_HOME}:${KUBECTL_HOME}:${env.PATH}"
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
@@ -99,8 +100,7 @@ pipeline {
                         try {
                             sh """
                             export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                            docker version
-                            docker-compose version
+                            docker version                            
                             docker ps
                             """
                             DOCKER_UP = true
@@ -113,20 +113,20 @@ pipeline {
             }
         }
         
-        stage('Create kind cluster') {
-            steps {
-                script {
-                    dir(PROJECT_KIND_FOLDER_PATH) {
-                        sh """
-                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                        export DOCKER_HOST_IP=${DOCKER_HOST}
-                        export KUBECONFIG=${KUBECONFIG}
-                        bash kind_create.sh
-                        """
-                    }
-                }
-            }
-        }
+        // stage('Create kind cluster') {
+        //     steps {
+        //         script {
+        //             dir(PROJECT_KIND_FOLDER_PATH) {
+        //                 sh """
+        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
+        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
+        //                 export KUBECONFIG=${KUBECONFIG}
+        //                 bash kind_create.sh
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Create dockercompose deploy') {
             steps {
