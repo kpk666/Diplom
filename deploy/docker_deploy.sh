@@ -1,3 +1,5 @@
+#! /bin/env bash
+
 # Docker version
 sudo docker version
 

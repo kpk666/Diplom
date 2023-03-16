@@ -21,9 +21,9 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
         PROJECT_FOLDER_PATH = 'terraform/structure'
-        PROJECT_DOCKER_FOLDER_PATH = 'deploy'
+        PROJECT_DOCKER_FOLDER_PATH = '../deploy'
         PROJECT_KIND_FOLDER_PATH = 'kind'
-        KUBECONFIG = '/var/jenkins_home/.kube/config'
+        KUBECONFIG = '/home/jenkins/.kube/config'
     }
 
     stages {
@@ -127,7 +127,7 @@ pipeline {
             }
         }
 
-        stage('Create docker-compose') {
+        stage('Create dockercompose deploy') {
             steps {
                 script {
                     dir(PROJECT_DOCKER_FOLDER_PATH) {
