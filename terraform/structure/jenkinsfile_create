@@ -21,7 +21,7 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
         PROJECT_FOLDER_PATH = 'terraform/structure'
-        PROJECT_DOCKER_FOLDER_PATH = '../deploy'
+        PROJECT_DOCKER_FOLDER_PATH = 'deploy'
         PROJECT_KIND_FOLDER_PATH = 'kind'
         KUBECONFIG = '/home/jenkins/.kube/config'
     }
@@ -112,6 +112,20 @@ pipeline {
             }
         }
         
+        stage('Create dockercompose deploy') {
+            steps {
+                script {
+                    dir(PROJECT_DOCKER_FOLDER_PATH) {
+                        sh """
+                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                        export DOCKER_HOST_IP=${DOCKER_HOST}
+                        bash docker_deploy.sh
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Create kind cluster') {
             steps {
                 script {
@@ -127,18 +141,6 @@ pipeline {
             }
         }
 
-        stage('Create dockercompose deploy') {
-            steps {
-                script {
-                    dir(PROJECT_DOCKER_FOLDER_PATH) {
-                        sh """
-                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                        export DOCKER_HOST_IP=${DOCKER_HOST}
-                        bash docker_deploy.sh
-                        """
-                    }
-                }
-            }
-        }
+        
     }
 }
