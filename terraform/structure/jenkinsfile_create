@@ -17,7 +17,7 @@ pipeline {
     environment {
         KIND_HOME = tool name: 'kind', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
         KUBECTL_HOME = tool name: 'kubectl', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-        DOCKERCOMPOSE_HOME = tool name: 'docker-compose', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+        DOCKERCOMPOSE_HOME = tool name: 'dockercompose', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
         PATH = "${KIND_HOME}:${KUBECTL_HOME}:${env.PATH}"
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
