@@ -134,10 +134,9 @@ pipeline {
                     dir(PROJECT_DOCKER_FOLDER_PATH) {
                         sh """
                         export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                        export DOCKER_HOST_IP=${DOCKER_HOST}
-                        ls
-                        ls ./bin
-                        ls /home/jenkins/agent                        
+                        export DOCKER_HOST_IP=${DOCKER_HOST}                        
+                        ls /home/jenkins/agent
+                        bash docker_deploy.sh                 
                         """
                     }
                 }
