@@ -1,0 +1,39 @@
+--- Start LOG
+--- 20230322-1136 :: Begin install. (NS: default, TAG: diplom-project) ---
+--- Creating Secret for imagePullSecrets
+secret/github-cred created
+--- Installing: ./k8s-manifests/blackboxexporter/blackbox-exporter.yaml
+service/prometheus-blackbox-exporter created
+deployment.apps/prometheus-blackbox-exporter created
+--- Installing: ./k8s-manifests/blackboxexporter/configmap.yaml
+configmap/prometheus-blackbox-exporter created
+--- Installing: ./k8s-manifests/calculator/deployment.yaml
+deployment.apps/calculator created
+--- Installing: ./k8s-manifests/calculator/ingress.yaml
+ingress.networking.k8s.io/calculator created
+--- Installing: ./k8s-manifests/calculator/service.yaml
+service/calculator created
+--- Installing: ./k8s-manifests/comment/configMap.yaml
+configmap/comment created
+--- Installing: ./k8s-manifests/comment/deployment.yaml
+deployment.apps/comment created
+--- Installing: ./k8s-manifests/comment/service.yaml
+service/comment created
+--- Installing: ./k8s-manifests/ingress/ingress.yaml
+ingress.networking.k8s.io/reddit created
+--- Installing: ./k8s-manifests/post/configMap.yaml
+configmap/post created
+--- Installing: ./k8s-manifests/post/deployment.yaml
+deployment.apps/post created
+--- Installing: ./k8s-manifests/post/service.yaml
+service/post created
+--- Installing: ./k8s-manifests/post-db/deployment.yaml
+deployment.apps/post-db created
+--- Installing: ./k8s-manifests/post-db/service.yaml
+service/post-db created
+--- Installing: ./k8s-manifests/ui/configMap.yaml
+configmap/ui created
+--- Installing: ./k8s-manifests/ui/deployment.yaml
+deployment.apps/ui created
+--- Installing: ./k8s-manifests/ui/service.yaml
+service/ui created
