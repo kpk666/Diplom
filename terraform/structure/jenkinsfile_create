@@ -24,7 +24,7 @@ pipeline {
         PROJECT_FOLDER_PATH = 'terraform/structure'
         PROJECT_DOCKER_FOLDER_PATH = 'deploy'
         PROJECT_KIND_FOLDER_PATH = 'kind'
-        PROJECT_FOLDER_PATH = 'project'
+        PROJECT_DEPLOY_FOLDER_PATH = 'project'
         PROJECT_APPS_FOLDER_PATH = 'project/project-app'
         KUBECONFIG = '/home/jenkins/.kube/config'
     }
@@ -148,7 +148,7 @@ pipeline {
         stage('Create project deployment') {
             steps {
                 script {
-                    dir(PROJECT_FOLDER_PATH) {
+                    dir(PROJECT_DEPLOY_FOLDER_PATH) {
                         sh """
                         export DOCKER_HOST="tcp://${DOCKER_HOST}"
                         export DOCKER_HOST_IP=${DOCKER_HOST}
