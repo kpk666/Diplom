@@ -10,7 +10,8 @@ menu_process() {
     "${bylw}Q${rst}) ${red}Exit${rst}\n"
     while :; do
         echo
-        read -rsN1 -p"${ylw}Your choice?${rst} " y
+        # read -rsN1 -p"${ylw}Your choice?${rst} " y
+        y=1
         case $y in
             1)
                 echo "${wht}Install...${rst}"
