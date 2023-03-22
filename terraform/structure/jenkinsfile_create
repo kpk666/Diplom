@@ -130,49 +130,48 @@ pipeline {
             }
         }
 
-        stage('Create applications') {
-            steps {
-                script {
-                    dir(PROJECT_APPS_FOLDER_PATH) {
-                        sh """
-                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                        export DOCKER_HOST_IP=${DOCKER_HOST}
-                        export KUBECONFIG=${KUBECONFIG}
-                        bash project-app.sh
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Create project deployment') {
-            steps {
-                script {
-                    dir(PROJECT_DEPLOY_FOLDER_PATH) {
-                        sh """
-                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                        export DOCKER_HOST_IP=${DOCKER_HOST}
-                        export KUBECONFIG=${KUBECONFIG}
-                        bash install_prometheus.sh
-                        """
-                    }
-                }
-            }
-        }
-
-        // stage('Create dockercompose deploy') {
+        // stage('Create applications') {
         //     steps {
         //         script {
-        //             dir(PROJECT_DOCKER_FOLDER_PATH) {
+        //             dir(PROJECT_APPS_FOLDER_PATH) {
         //                 sh """
         //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}                        
-        //                 ls /home/jenkins/agent
-        //                 bash docker_deploy.sh                 
+        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
+        //                 export KUBECONFIG=${KUBECONFIG}
+        //                 bash project-app.sh
         //                 """
         //             }
         //         }
         //     }
         // }
+
+        // stage('Create project deployment') {
+        //     steps {
+        //         script {
+        //             dir(PROJECT_DEPLOY_FOLDER_PATH) {
+        //                 sh """
+        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
+        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
+        //                 export KUBECONFIG=${KUBECONFIG}
+        //                 bash install_prometheus.sh
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Create dockercompose deploy') {
+            steps {
+                script {
+                    dir(PROJECT_DOCKER_FOLDER_PATH) {
+                        sh """
+                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                        export DOCKER_HOST_IP=${DOCKER_HOST}                        
+                        bash docker_deploy.sh                 
+                        """
+                    }
+                }
+            }
+        }
     }
 }
