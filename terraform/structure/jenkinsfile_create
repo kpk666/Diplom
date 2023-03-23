@@ -49,26 +49,26 @@ pipeline {
             }
         }
 
-        stage('Waiting cloud-init') {
-            steps {
-                script {
-                    DOCKER_UP = false
-                    while (!DOCKER_UP) {
-                        try {
-                            sh """
-                            export DOCKER_HOST="tcp://${DOCKER_HOST}"
-                            docker version                            
-                            docker ps
-                            """
-                            DOCKER_UP = true
-                        } catch (err) {
-                            println "Waiting remote docker up..."
-                            sleep 10
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Waiting cloud-init') {
+        //     steps {
+        //         script {
+        //             DOCKER_UP = false
+        //             while (!DOCKER_UP) {
+        //                 try {
+        //                     sh """
+        //                     export DOCKER_HOST="tcp://${DOCKER_HOST}"
+        //                     docker version                            
+        //                     docker ps
+        //                     """
+        //                     DOCKER_UP = true
+        //                 } catch (err) {
+        //                     println "Waiting remote docker up..."
+        //                     sleep 10
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Create dockercompose deploy') {
             steps {
