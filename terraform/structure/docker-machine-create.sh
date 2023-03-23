@@ -1,6 +1,6 @@
 #! /bin/env bash
 
-INSTANCE_NAME="docker_compose"
+INSTANCE_NAME="dockergoodplace"
 
 docker-machine rm "$INSTANCE_NAME" -y
 
