@@ -10,7 +10,7 @@ docker-machine create \
 	--amazonec2-region us-west-1 \
 	--amazonec2-ami ami-0d221cb540e0015f4 \
 	--amazonec2-instance-type t2.micro \
-	--amazonec2-open-port 8080 \
+	--amazonec2-open-ports 9090,  \
 "$INSTANCE_NAME"
 
 
