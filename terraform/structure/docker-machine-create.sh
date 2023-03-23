@@ -2,7 +2,7 @@
 
 INSTANCE_NAME="dockercompose"
 
-y | docker-machine rm "$INSTANCE_NAME"
+docker-machine rm "$INSTANCE_NAME" -y
 
 echo -e "\nCreating machine..."
 docker-machine create \
