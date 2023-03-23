@@ -61,8 +61,8 @@ services:
     image: gortazar/web-calculator:0.1
     ports:
       - 9095:9090
-    container_name: calculator
-    hostname: calculator
+    container_name: webcalculator
+    hostname: webcalculator
     restart: unless-stopped
     environment:
       TZ: "Europe/Warsaw"  
@@ -75,8 +75,8 @@ services:
       - --log.level=info
       - --store=bolt
       - --bolt.path=/data/bot.db
-      - --telegram.admin=MTMzNjMwMDQ2Ng==
-      - --telegram.token=NTgxMTk2Mzg2OTpBQUZWMVNvcS00eXYxUVZwY2pvODJ6cFlNSVZ4WmRJNmI4bw==
+      - --telegram.admin=1336300466
+      - --telegram.token=5811963869:AAFV1Soq-4yv1QVpcjo82zpYMIVxZdI6b8o
     image: metalmatze/alertmanager-bot:0.4.3
     user: root
     ports:
