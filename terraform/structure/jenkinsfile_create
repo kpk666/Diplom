@@ -32,7 +32,7 @@ pipeline {
     stages {
         stage('Create a docker-machine') {
             steps {
-                dir(PROJECT_DOCKER_FOLDER_PATH) {
+                dir(PROJECT_FOLDER_PATH) {
                     sh "bash docker-machine-create.sh"
                 }
             }
