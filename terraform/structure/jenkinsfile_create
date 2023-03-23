@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_FOLDER_PATH) {
-                        DOCKER_HOST = sh(returnStdout: true, script: "docker-machine ip dockercompose").trim().replaceAll('"','')
+                        DOCKER_HOST = sh(returnStdout: true, script: "docker-machine ip dockergoodplace").trim().replaceAll('"','')
                         println DOCKER_HOST
                     }
                 }
