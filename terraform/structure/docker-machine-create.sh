@@ -2,8 +2,8 @@
 
 INSTANCE_NAME="dockercompose"
 
-docker-machine rm "$INSTANCE_NAME"\r
-send -- "y\r"
+y | docker-machine rm "$INSTANCE_NAME"
+
 echo -e "\nCreating machine..."
 docker-machine create \
 	--driver amazonec2 \
