@@ -20,7 +20,7 @@ docker-machine create \
 
 
 echo -e "\nActivating machine.."
-echo -e "Docker machine ip - $(docker-machine ip "$INSTANCE_NAME")"
 echo -e "\nSwitch to $INSTANCE_NAME."
+docker-machine use "$INSTANCE_NAME"
 echo -e "\nDONE!."
 echo -e "Docker machine ip - $(docker-machine ip "$INSTANCE_NAME")"
