@@ -21,7 +21,7 @@ data "aws_key_pair" "selected" {
 
 resource "aws_instance" "Dockerstation" {
   ami             = data.aws_ami.ubuntu.image_id
-  instance_type   = "t2.micro"
+  instance_type   = "t2.small"
   key_name        = data.aws_key_pair.selected.key_name
   security_groups = [aws_security_group.allow_ssh_web_kube_docker.name]
   associate_public_ip_address = true
