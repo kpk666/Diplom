@@ -74,16 +74,16 @@ pipeline {
             }
         }
 
-        stage('Delete KUBECONFIG') {
-            steps {
-                script {
-                    try {
-                        sh "rm ${KUBECONFIG}"
-                    } catch (err) {
-                        println "Failed remove ${KUBECONFIG} (${err.getMessage()})"
-                    }
-                }
-            }
-        }
+        // stage('Delete KUBECONFIG') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 sh "rm ${KUBECONFIG}"
+        //             } catch (err) {
+        //                 println "Failed remove ${KUBECONFIG} (${err.getMessage()})"
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
