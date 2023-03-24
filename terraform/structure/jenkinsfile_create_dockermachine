@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('Terraform output') {
+        stage('Dockermachine output') {
             steps {
                 script {
                     dir(PROJECT_FOLDER_PATH) {
@@ -49,6 +49,19 @@ pipeline {
             }
         }
 
+        stage('Apply dockercompose deploy') {
+            steps {
+                script {
+                    dir(PROJECT_DOCKER_FOLDER_PATH) {
+                        sh """
+                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                        export DOCKER_HOST_IP=${DOCKER_HOST}                        
+                        bash docker_deploy.sh
+                        """
+                    }
+                }
+            }
+        }        
         // stage('Waiting cloud-init') {
         //     steps {
         //         script {
@@ -70,17 +83,17 @@ pipeline {
         //     }
         // }
 
-        stage('Create dockercompose deploy') {
-            steps {
-                script {
-                    dir(PROJECT_DOCKER_FOLDER_PATH) {
-                        sh """                                   
-                        bash docker_deploy.sh                 
-                        """
-                    }
-                }
-            }
-        }
+        // stage('Create dockercompose deploy') {
+        //     steps {
+        //         script {
+        //             dir(PROJECT_DOCKER_FOLDER_PATH) {
+        //                 sh """                                   
+        //                 bash docker_deploy.sh                 
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
     // stages {
     //     stage('Terraform Init') {
     //         steps {
