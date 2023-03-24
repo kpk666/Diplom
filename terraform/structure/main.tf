@@ -36,7 +36,7 @@ resource "aws_security_group" "allow_ssh_web_kube_docker" {
   name        = "allow_ssh_web_kube_docker"
   description = "Allow access for SSH, web, kube and docker"
   dynamic "ingress" {
-    for_each = ["22", "9292", "6443", "2375", "2376", "9090", "9095", "3000", "9115"]
+    for_each = ["22", "9292", "6443", "2375", "2376", "9090", "9095", "3000", "9115, 8080, 8083"]
     content {
       from_port   = ingress.value
       to_port     = ingress.value
