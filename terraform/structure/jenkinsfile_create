@@ -33,7 +33,7 @@ pipeline {
         stage('Create a docker-machine') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
-                    sh "bash docker-machine-create.sh"
+                    sh "bash docker-machine-terra.sh"
                 }
             }
         }
