@@ -29,11 +29,82 @@ pipeline {
         KUBECONFIG = '/home/jenkins/.kube/config'
     }
 
+    // stages {
+    //     stage('Create a docker-machine') {
+    //         steps {
+    //             dir(PROJECT_FOLDER_PATH) {
+    //                 sh """
+    //                 bash docker-machine-terra.sh
+    //                 eval $(docker-machine env "$MACHINE_NAME")
+    //                 """
+    //             }
+    //         }
+    //     }
+
+
+
+
+        // stage('Create dockercompose deploy') {
+        //     steps {
+        //         script {
+        //             dir(PROJECT_DOCKER_FOLDER_PATH) {
+        //                 sh """                                   
+        //                 bash docker_deploy.sh                 
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
     stages {
-        stage('Create a docker-machine') {
+        stage('Terraform Init') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
-                    sh "bash docker-machine-terra.sh"
+                    sh "terraform init -input=false"
+                }
+            }
+        }
+
+        stage('Terraform validate') {
+            steps {
+                dir(PROJECT_FOLDER_PATH) {
+                    sh "terraform validate"
+                }
+            }
+        }
+
+        stage('Terraform plan') {
+            steps {
+                script {
+                    SKIP_TERRAFORM_APPLY = false
+                    dir(PROJECT_FOLDER_PATH) {
+                        log = sh(returnStdout: true, script: "terraform plan -var 'access_key=${AWS_ACCESS_KEY_ID}' -var 'secret_key=${AWS_SECRET_ACCESS_KEY}' -out terraform.tfplan").trim()
+                        println log
+                        log.readLines().collect { line ->
+                            if (line =~ "No changes") {
+                                SKIP_TERRAFORM_APPLY = true
+                            }
+                        }
+                        stash name: "terraform-plan", includes: "terraform.tfplan"
+                    }
+                }
+            }
+        }
+
+        stage('Terraform apply') {
+            when {
+                expression { !SKIP_TERRAFORM_APPLY }
+            }
+            steps {
+                script {
+                    def apply = false
+                    input message: 'Confirm plan?', ok: 'Apply'
+                    apply = true
+                    if (apply) {
+                        dir(PROJECT_FOLDER_PATH) {
+                            unstash "terraform-plan"
+                            sh "terraform apply terraform.tfplan"
+                        }
+                    }
                 }
             }
         }
@@ -42,175 +113,78 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_FOLDER_PATH) {
-                        DOCKER_HOST = sh(returnStdout: true, script: "docker-machine ip dockergoodplace").trim().replaceAll('"','')
+                        DOCKER_HOST = sh(returnStdout: true, script: "terraform output aws_instance_Dockerstation_ip").trim().replaceAll('"','')
                         println DOCKER_HOST
                     }
                 }
             }
         }
 
-        // stage('Waiting cloud-init') {
-        //     steps {
-        //         script {
-        //             DOCKER_UP = false
-        //             while (!DOCKER_UP) {
-        //                 try {
-        //                     sh """
-        //                     export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                     docker version                            
-        //                     docker ps
-        //                     """
-        //                     DOCKER_UP = true
-        //                 } catch (err) {
-        //                     println "Waiting remote docker up..."
-        //                     sleep 10
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        stage('Create dockercompose deploy') {
+        stage('Waiting cloud-init') {
             steps {
                 script {
-                    dir(PROJECT_DOCKER_FOLDER_PATH) {
-                        sh """                                   
-                        bash docker_deploy.sh                 
+                    DOCKER_UP = false
+                    while (!DOCKER_UP) {
+                        try {
+                            sh """
+                            export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                            docker version                            
+                            docker ps
+                            """
+                            DOCKER_UP = true
+                        } catch (err) {
+                            println "Waiting remote docker up..."
+                            sleep 10
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Create kind cluster') {
+            steps {
+                script {
+                    dir(PROJECT_KIND_FOLDER_PATH) {
+                        sh """
+                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                        export DOCKER_HOST_IP=${DOCKER_HOST}
+                        export KUBECONFIG=${KUBECONFIG}
+                        bash kind_create.sh
                         """
                     }
                 }
             }
         }
-    // stages {
-    //     stage('Terraform Init') {
-    //         steps {
-    //             dir(PROJECT_FOLDER_PATH) {
-    //                 sh "terraform init -input=false"
-    //             }
-    //         }
-    //     }
 
-    //     stage('Terraform validate') {
-    //         steps {
-    //             dir(PROJECT_FOLDER_PATH) {
-    //                 sh "terraform validate"
-    //             }
-    //         }
-    //     }
+        stage('Create applications') {
+            steps {
+                script {
+                    dir(PROJECT_APPS_FOLDER_PATH) {
+                        sh """
+                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                        export DOCKER_HOST_IP=${DOCKER_HOST}
+                        export KUBECONFIG=${KUBECONFIG}
+                        bash project-app.sh
+                        """
+                    }
+                }
+            }
+        }
 
-    //     stage('Terraform plan') {
-    //         steps {
-    //             script {
-    //                 SKIP_TERRAFORM_APPLY = false
-    //                 dir(PROJECT_FOLDER_PATH) {
-    //                     log = sh(returnStdout: true, script: "terraform plan -var 'access_key=${AWS_ACCESS_KEY_ID}' -var 'secret_key=${AWS_SECRET_ACCESS_KEY}' -out terraform.tfplan").trim()
-    //                     println log
-    //                     log.readLines().collect { line ->
-    //                         if (line =~ "No changes") {
-    //                             SKIP_TERRAFORM_APPLY = true
-    //                         }
-    //                     }
-    //                     stash name: "terraform-plan", includes: "terraform.tfplan"
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     stage('Terraform apply') {
-    //         when {
-    //             expression { !SKIP_TERRAFORM_APPLY }
-    //         }
-    //         steps {
-    //             script {
-    //                 def apply = false
-    //                 input message: 'Confirm plan?', ok: 'Apply'
-    //                 apply = true
-    //                 if (apply) {
-    //                     dir(PROJECT_FOLDER_PATH) {
-    //                         unstash "terraform-plan"
-    //                         sh "terraform apply terraform.tfplan"
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     stage('Terraform output') {
-    //         steps {
-    //             script {
-    //                 dir(PROJECT_FOLDER_PATH) {
-    //                     DOCKER_HOST = sh(returnStdout: true, script: "terraform output aws_instance_Dockerstation_ip").trim().replaceAll('"','')
-    //                     println DOCKER_HOST
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     stage('Waiting cloud-init') {
-    //         steps {
-    //             script {
-    //                 DOCKER_UP = false
-    //                 while (!DOCKER_UP) {
-    //                     try {
-    //                         sh """
-    //                         export DOCKER_HOST="tcp://${DOCKER_HOST}"
-    //                         docker version                            
-    //                         docker ps
-    //                         """
-    //                         DOCKER_UP = true
-    //                     } catch (err) {
-    //                         println "Waiting remote docker up..."
-    //                         sleep 10
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-        
-        // stage('Create kind cluster') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_KIND_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
-        //                 export KUBECONFIG=${KUBECONFIG}
-        //                 bash kind_create.sh
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Create applications') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_APPS_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
-        //                 export KUBECONFIG=${KUBECONFIG}
-        //                 bash project-app.sh
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Create project deployment') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_DEPLOY_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
-        //                 export KUBECONFIG=${KUBECONFIG}
-        //                 bash install_prometheus.sh
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Create project deployment') {
+            steps {
+                script {
+                    dir(PROJECT_DEPLOY_FOLDER_PATH) {
+                        sh """
+                        export DOCKER_HOST="tcp://${DOCKER_HOST}"
+                        export DOCKER_HOST_IP=${DOCKER_HOST}
+                        export KUBECONFIG=${KUBECONFIG}
+                        bash install_prometheus.sh
+                        """
+                    }
+                }
+            }
+        }
 
         // stage('Create dockercompose deploy') {
         //     steps {
