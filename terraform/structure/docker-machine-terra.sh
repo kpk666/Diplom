@@ -16,6 +16,8 @@ docker-machine create \
 	--amazonec2-open-port 3000 \
 	--amazonec2-open-port 8083 \
 	--amazonec2-open-port 9115 \
+	--amazonec2-open-port 2375 \
+	--amazonec2-open-port 2376 \
 "$INSTANCE_NAME"
 
 
