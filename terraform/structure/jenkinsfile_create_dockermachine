@@ -33,10 +33,7 @@ pipeline {
         stage('Create a docker-machine') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
-                    sh """
-                    bash docker-machine-terra.sh
-                    eval $(docker-machine env dockergoodplace)
-                    """
+                    sh "bash docker-machine-terra.sh"
                 }
             }
         }
