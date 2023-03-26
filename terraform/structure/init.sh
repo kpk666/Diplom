@@ -49,6 +49,6 @@ sudo apt install gh
 echo "Installation of gh is complited"
 echo "Clonning git repository"
 cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git
-
-echo -e "#!/bin/bash\n cd git/Diplom/deploy && bash docker_deploy.sh"  > start_deploy.sh
-chmod +x ./start_deploy.sh
+cd /home/ubuntu
+echo -e "#!/bin/bash\n cd git/Diplom/deploy && bash docker_deploy.sh" > /home/ubuntu/start_deploy.sh
+cd /home/ubuntu && chmod +x ./start_deploy.sh
