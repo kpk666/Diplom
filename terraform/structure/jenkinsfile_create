@@ -207,7 +207,7 @@ pipeline {
                         export DOCKER_HOST="tcp://${DOCKER_HOST}"
                         export DOCKER_HOST_IP=${DOCKER_HOST}  
                         cd /home/jenkins                      
-                        ssh -i "Ast-key-west.pem" "StrictHostKeyChecking=no" ubuntu@ec2-"$DOCKER_HOST".us-west-1.compute.amazonaws.com -y
+                        ssh -i "Ast-key-west.pem" -o "StrictHostKeyChecking=no" ubuntu@ec2-"$DOCKER_HOST".us-west-1.compute.amazonaws.com
                         cd git/Diplom/deploy
                         docker-compose up -d
                         """
