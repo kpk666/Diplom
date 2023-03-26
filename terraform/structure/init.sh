@@ -21,10 +21,9 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 echo "Docker success instaled"
 
-DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-sudo curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-sudo chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.17.0/docker-compose-linux-x86_64 -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
 
 # configuring docker for remote connect
 echo "Docker configuring..."
@@ -41,8 +40,11 @@ sudo systemctl restart docker
 echo "Docker success configured"
 
 # github install
+mkdir /home/ubuntu/git
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null 
 sudo apt update 
 sudo apt install gh
 echo "Installation of gh is complited"
+echo "Clonning git repository"
+cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git

@@ -186,6 +186,19 @@ pipeline {
         //     }
         // }
 
+        // stage('Create dockercompose deploy') {
+        //     steps {
+        //         script {
+        //             dir(PROJECT_DOCKER_FOLDER_PATH) {
+        //                 sh """
+        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
+        //                 export DOCKER_HOST_IP=${DOCKER_HOST}                        
+        //                 bash docker_deploy.sh                 
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
         stage('Create dockercompose deploy') {
             steps {
                 script {
@@ -193,7 +206,9 @@ pipeline {
                         sh """
                         export DOCKER_HOST="tcp://${DOCKER_HOST}"
                         export DOCKER_HOST_IP=${DOCKER_HOST}                        
-                        bash docker_deploy.sh                 
+                        ssh -i "Ast-key-west.pem" ubuntu@ec2-"$DOCKER_HOST".us-west-1.compute.amazonaws.com -y
+                        cd git/Diplom/deploy
+                        docker-compose up -d
                         """
                     }
                 }

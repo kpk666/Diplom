@@ -9,15 +9,15 @@ docker-machine create \
 	--driver amazonec2 \
 	--amazonec2-region us-west-1 \
 	--amazonec2-ami ami-0d221cb540e0015f4 \
-	--amazonec2-instance-type t2.micro \
+	--amazonec2-instance-type t2.small \
 	--amazonec2-open-port 9090 \
 	--amazonec2-open-port 8080 \
-	--amazonec2-open-port 9095 \
+	--amazonec2-open-port 2376 \
 	--amazonec2-open-port 3000 \
 	--amazonec2-open-port 8083 \
 	--amazonec2-open-port 9115 \
 	--amazonec2-open-port 2375 \
-	--amazonec2-open-port 2376 \
+	--amazonec2-open-port 9095 \
 "$INSTANCE_NAME"
 
 
