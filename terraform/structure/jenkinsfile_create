@@ -210,7 +210,7 @@ pipeline {
                         pwd
                         ls
                         cd ~                                            
-                        ssh -i "Ast-key-west.pem" -o "StrictHostKeyChecking=no"  ubuntu@"$DOCKER_HOST" ./start_deploy.sh                       
+                        ssh -i "Ast-key-west.pem" -o "StrictHostKeyChecking=no"  ubuntu@"$DOCKER_HOST" sudo ./start_deploy.sh                       
                         """
                     }
                 }
