@@ -113,7 +113,7 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_FOLDER_PATH) {
-                        DOCKER_HOST = sh(returnStdout: true, script: "aws_instance_Dockerstation_public_ip").trim().replaceAll('"','')
+                        DOCKER_HOST = sh(returnStdout: true, script: "aws_instance_Dockerstation_ip").trim().replaceAll('"','')
                         println DOCKER_HOST
                     }
                 }
