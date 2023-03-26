@@ -19,6 +19,7 @@ echo \
 sudo apt-get update
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo usermod -aG docker $USER
 echo "Docker success instaled"
 
 
@@ -48,3 +49,6 @@ sudo apt install gh
 echo "Installation of gh is complited"
 echo "Clonning git repository"
 cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git
+
+echo -e "#!/bin/bash\nsudo cd git/Diplom/deploy && docker_deploy.sh"  > start_deploy.sh
+chmod +x ./start_deploy.sh
