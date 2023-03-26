@@ -206,7 +206,7 @@ pipeline {
                         sh """
                         export DOCKER_HOST="tcp://${DOCKER_HOST}"
                         export DOCKER_HOST_IP=${DOCKER_HOST}                                               
-                        ssh -i "Ast-key-west.pem" -o "StrictHostKeyChecking=no"  ubuntu@ec2-"$DOCKER_HOST".us-west-1.compute.amazonaws.com
+                        ssh -i "Ast-key-west.pem" -o "StrictHostKeyChecking=no"  ubuntu@"$DOCKER_HOST"
                         sudo ./start_deploy.sh                       
                         """
                     }
