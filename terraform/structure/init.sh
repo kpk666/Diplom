@@ -50,5 +50,5 @@ echo "Installation of gh is complited"
 echo "Clonning git repository"
 cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git
 
-echo -e "#!/bin/bash\nsudo cd git/Diplom/deploy && docker_deploy.sh"  > start_deploy.sh
+echo -e "#!/bin/bash\n cd git/Diplom/deploy && bash docker_deploy.sh"  > start_deploy.sh
 chmod +x ./start_deploy.sh
