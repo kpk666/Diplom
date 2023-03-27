@@ -15,47 +15,14 @@ pipeline {
     }
 
     environment {
-        KIND_HOME = tool name: 'kind', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-        KUBECTL_HOME = tool name: 'kubectl', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
         DOCKERCOMPOSE_HOME = tool name: 'dockercompose', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-        PATH = "${KIND_HOME}:${KUBECTL_HOME}:${env.PATH}"
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
         PROJECT_FOLDER_PATH = 'terraform/structure'
         PROJECT_DOCKER_FOLDER_PATH = 'deploy'
-        PROJECT_KIND_FOLDER_PATH = 'kind'
-        PROJECT_DEPLOY_FOLDER_PATH = 'project'
-        PROJECT_APPS_FOLDER_PATH = 'project/project-app'
-        KUBECONFIG = '/home/jenkins/.kube/config'
         HOME_AGENT = '/home/jenkins'
     }
 
-    // stages {
-    //     stage('Create a docker-machine') {
-    //         steps {
-    //             dir(PROJECT_FOLDER_PATH) {
-    //                 sh """
-    //                 bash docker-machine-terra.sh
-    //                 eval $(docker-machine env "$MACHINE_NAME")
-    //                 """
-    //             }
-    //         }
-    //     }
-
-
-
-
-        // stage('Create dockercompose deploy') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_DOCKER_FOLDER_PATH) {
-        //                 sh """                                   
-        //                 bash docker_deploy.sh                 
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
     stages {
         stage('Terraform Init') {
             steps {
@@ -142,64 +109,7 @@ pipeline {
             }
         }
         
-        // stage('Create kind cluster') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_KIND_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
-        //                 export KUBECONFIG=${KUBECONFIG}
-        //                 bash kind_create.sh
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Create applications') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_APPS_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
-        //                 export KUBECONFIG=${KUBECONFIG}
-        //                 bash project-app.sh
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Create project deployment') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_DEPLOY_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}
-        //                 export KUBECONFIG=${KUBECONFIG}
-        //                 bash install_prometheus.sh
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Create dockercompose deploy') {
-        //     steps {
-        //         script {
-        //             dir(PROJECT_DOCKER_FOLDER_PATH) {
-        //                 sh """
-        //                 export DOCKER_HOST="tcp://${DOCKER_HOST}"
-        //                 export DOCKER_HOST_IP=${DOCKER_HOST}                        
-        //                 bash docker_deploy.sh                 
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+       
         stage('Create dockercompose deploy') {
             steps {
                 script {
