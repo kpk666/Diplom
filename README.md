@@ -17,7 +17,7 @@ Launch a docker-machine in AWS:
 
 #### Step 2
 
-Execute an installation of docker with the Jenkins application. Launch bash script "jenkins.sh" with the argument "up" in the folder "jenkins".
+Execute an installation of docker container with the Jenkins application. Launch bash script "jenkins.sh" with the argument "up" in the folder "jenkins".
 
 #### Step 3
 
