@@ -58,9 +58,9 @@ services:
       - default
 
   calculator:
-    image: gortazar/web-calculator:0.1
+    image: cliffenator/calculator-app:latest
     ports:
-      - 0.0.0.0:9095:9090
+      - 0.0.0.0:9095:80
     container_name: webcalculator
     hostname: webcalculator
     restart: unless-stopped
@@ -76,7 +76,7 @@ services:
       - --store=bolt
       - --bolt.path=/data/bot.db
       - --telegram.admin=1336300466
-      - --telegram.token=5811963869:AAFV1Soq-4yv1QVpcjo82zpYMIVxZdI6b8o
+      - --telegram.token=6110956366:AAEORGJkK1IgpyM63G3O1HREPtMQbxBuj58
     image: metalmatze/alertmanager-bot:0.4.3
     user: root
     ports:

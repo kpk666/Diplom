@@ -4,7 +4,7 @@
 export MACHINE_NAME="jenkins"
 export SYNC_FOLDER="jenkins"
 export MACHINE_USER="ubuntu"
-export ROOT_DIR="/mnt/d/Courses/Diplom"
+export ROOT_DIR="your directory"
 
 CWD="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 red="$( echo -e '\033[0;31m' )" # Red
@@ -47,5 +47,4 @@ docker-machine ssh "$MACHINE_NAME" "chmod 400 /home/"$MACHINE_USER"/Ast-key-west
 echo -e $grn"\nActivating machine.."$rst
 echo -e $grn"Docker machine ip - $(docker-machine ip "$MACHINE_NAME")"$rst
 echo -e $red"Run this command to configure your shell:"$rst
-# echo -e $red"eval $(docker-machine env "$MACHINE_NAME")"$rst
 echo -e $red"docker-machine use "$MACHINE_NAME""$rst
