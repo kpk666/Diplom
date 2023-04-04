@@ -11,13 +11,15 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
-      - 0.0.0.0:9090:9090
+      - 9090:9090
     restart: unless-stopped
     environment:
       TZ: "Europe/Warsaw"
     networks:
       - default
-
+    depends_on:
+      - cadvisor
+      
   node-exporter:
     image: prom/node-exporter
     volumes:
@@ -32,7 +34,7 @@ services:
       - --collector.filesystem.ignored-mount-points
       - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
     ports:
-      - 0.0.0.0:9100:9100
+      - 9100:9100
     restart: unless-stopped
     environment:
       TZ: "Europe/Warsaw"
@@ -45,7 +47,7 @@ services:
     depends_on:
       - prometheus
     ports:
-      - 0.0.0.0:3000:3000
+      - 3000:3000
     volumes:
       - ./grafana:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/
@@ -60,7 +62,7 @@ services:
   calculator:
     image: cliffenator/calculator-app:latest
     ports:
-      - 0.0.0.0:9095:80
+      - 9095:80
     container_name: webcalculator
     hostname: webcalculator
     restart: unless-stopped
@@ -80,7 +82,7 @@ services:
     image: metalmatze/alertmanager-bot:0.4.3
     user: root
     ports:
-      - 0.0.0.0:8080:8080
+      - 8082:8080
     container_name: alertmanager-bot
     hostname: alertmanager-bot
     environment:
@@ -95,7 +97,7 @@ services:
     image: prom/alertmanager:v0.21.0
     user: root
     ports:
-      - 127.0.0.1:9093:9093
+      - 9093:9093
     volumes:
       - ./alertmanager/:/etc/alertmanager/
     container_name: alertmanager
@@ -114,7 +116,7 @@ services:
     container_name: blackbox
     hostname: blackbox
     ports:
-      - 0.0.0.0:9115:9115
+      - 9115:9115
     restart: unless-stopped
     command:
       - "--config.file=/etc/blackbox/blackbox.yml"
@@ -124,7 +126,38 @@ services:
       TZ: "Europe/Warsaw"
     networks:
       - default
-        
+
+  docker_exporter:
+    image: prometheusnet/docker_exporter
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: docker_exporter
+    hostname: docker_exporter
+    ports:
+      - 9417:9417
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Warsaw"
+    networks:
+      - default
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest # google/cadvisor:latest
+    ports:
+      - '8086:8080'
+    volumes:
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    container_name: cadvisor
+    hostname: cadvisor
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Warsaw"
+    networks:
+      - default
+
 
 networks:
   default:

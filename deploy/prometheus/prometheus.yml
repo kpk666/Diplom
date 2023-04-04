@@ -1,9 +1,15 @@
 scrape_configs:
-  - job_name: node
+  - job_name: 'node'
     scrape_interval: 5s
     static_configs:
     - targets: 
-      - 'node-exporter:9100' 
+      - 'node-exporter:9100'
+
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+    - targets: 
+      - 'localhost:9090'
 
   - job_name: 'blackbox_http'
     metrics_path: /probe
@@ -11,7 +17,8 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:  
-        - http://webcalculator:9095       
+        - http://webcalculator:9095  
+        - https://google.com     
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -20,7 +27,7 @@ scrape_configs:
       - target_label: __address__
         replacement: blackbox:9115
 
-  - job_name: blackbox_tcp
+  - job_name: 'blackbox_tcp'
     metrics_path: /probe
     params:
       module: [tcp_connect]
@@ -34,6 +41,30 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox:9115 
+
+  - job_name: 'my_docker_metrics'
+    static_configs:
+    - targets: 
+      - 'docker_exporter:9417'
+
+  # - job_name: 'cadvisor' 
+  #   static_configs:
+  #     - targets: 
+  #       - 'cadvisor:8086'
+
+#  - job_name: "cadvisor"
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: ['localhost:8086']
+#        labels:
+#          alias: "cadvisor"
+
+  - job_name: "cadvisor"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8086']
+        labels:
+          alias: "cadvisor"
 
 rule_files:
   - 'alert.rules'
