@@ -110,7 +110,7 @@ pipeline {
         }
         
        
-        stage('Create dockercompose deploy') {
+        stage('Dockercompose deploy') {
             steps {
                 script {
                     dir(PROJECT_DOCKER_FOLDER_PATH) {

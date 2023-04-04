@@ -17,8 +17,7 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:  
-        - http://webcalculator:9095  
-        - https://google.com     
+        - http://webcalculator:9095      
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -47,24 +46,11 @@ scrape_configs:
     - targets: 
       - 'docker_exporter:9417'
 
-  # - job_name: 'cadvisor' 
-  #   static_configs:
-  #     - targets: 
-  #       - 'cadvisor:8086'
-
-#  - job_name: "cadvisor"
-#    scrape_interval: 5s
-#    static_configs:
-#      - targets: ['localhost:8086']
-#        labels:
-#          alias: "cadvisor"
-
-  - job_name: "cadvisor"
-    scrape_interval: 5s
+  - job_name: 'cadvisor' 
     static_configs:
-      - targets: ['cadvisor:8086']
-        labels:
-          alias: "cadvisor"
+      - targets: 
+        - 'cadvisor:8086'
+
 
 rule_files:
   - 'alert.rules'
