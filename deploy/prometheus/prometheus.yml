@@ -46,10 +46,12 @@ scrape_configs:
     - targets: 
       - 'docker_exporter:9417'
 
-  - job_name: 'cadvisor' 
-    static_configs:
-      - targets: 
-        - 'cadvisor:8086'
+  - job_name: 'cadvisor'
+    dns_sd_configs:
+    - names:
+      - 'tasks.cadvisor'
+      type: 'A'
+      port: 8090
 
 
 rule_files:
