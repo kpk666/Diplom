@@ -62,7 +62,7 @@ services:
   calculator:
     image: cliffenator/calculator-app:latest
     ports:
-      - 9095:80
+      - 9095:8080
     container_name: webcalculator
     hostname: webcalculator
     restart: unless-stopped
