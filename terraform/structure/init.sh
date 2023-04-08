@@ -38,6 +38,8 @@ EOF"
 sudo sed -i 's/ -H fd:\/\///g' /lib/systemd/system/docker.service
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+echo -e "#!/bin/bash\n cd git/Diplom/deploy && sudo docker-compose up -d" > /home/ubuntu/start_deploy.sh
+cd /home/ubuntu && chmod +x ./start_deploy.sh
 echo "Docker success configured"
 
 # github install
@@ -50,5 +52,3 @@ echo "Installation of gh is complited"
 echo "Clonning git repository"
 cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git
 cd /home/ubuntu
-echo -e "#!/bin/bash\n cd git/Diplom/deploy && sudo docker-compose up -d" > /home/ubuntu/start_deploy.sh
-cd /home/ubuntu && chmod +x ./start_deploy.sh
