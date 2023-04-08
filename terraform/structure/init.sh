@@ -1,5 +1,19 @@
 #! /bin/env bash
 
+# github install
+mkdir /home/ubuntu/git
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null 
+sudo apt update 
+sudo apt install gh
+echo "Installation of gh is complited"
+echo "Clonning git repository"
+cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git
+cd /home/ubuntu
+echo -e "#!/bin/bash\n cd git/Diplom/deploy && sudo docker-compose up -d" > /home/ubuntu/start_deploy.sh
+cd /home/ubuntu && chmod +x ./start_deploy.sh
+
+
 # install_docker
 echo "Docker installing..."
 sudo apt-get update
@@ -38,17 +52,6 @@ EOF"
 sudo sed -i 's/ -H fd:\/\///g' /lib/systemd/system/docker.service
 sudo systemctl daemon-reload
 sudo systemctl restart docker
-echo -e "#!/bin/bash\n cd git/Diplom/deploy && sudo docker-compose up -d" > /home/ubuntu/start_deploy.sh
-cd /home/ubuntu && chmod +x ./start_deploy.sh
 echo "Docker success configured"
 
-# github install
-mkdir /home/ubuntu/git
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null 
-sudo apt update 
-sudo apt install gh
-echo "Installation of gh is complited"
-echo "Clonning git repository"
-cd /home/ubuntu/git && git clone https://github.com/kpk666/Diplom.git
-cd /home/ubuntu
+
