@@ -1,5 +1,4 @@
 #! /bin/env bash
-# source ./set_cred_env.sh
 
 export MACHINE_NAME="jenkins"
 export SYNC_FOLDER="jenkins"
