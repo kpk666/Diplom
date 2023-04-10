@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: PrometheusTargetMissing
     expr: up == 0
-    for: 30s
+    for: 1m
     labels:
       severity: critical
     annotations:
@@ -11,7 +11,7 @@ groups:
       description: "A Prometheus target has disappeared. An exporter might be crashed. VALUE = {{ $value }}  LABELS: {{ $labels }}"
   - alert: BlackboxSlowProbe
     expr: avg_over_time(probe_duration_seconds[1m]) > 2
-    for: 30s
+    for: 1m
     labels:
       severity: warning
     annotations:
