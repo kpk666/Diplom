@@ -60,9 +60,9 @@ services:
       - default
 
   calculator:
-    image: cliffenator/calculator-app:latest
+    image: ghcr.io/kpk666/web-calculator:latest
     ports:
-      - 9095:8080
+      - 9095:80
     container_name: webcalculator
     hostname: webcalculator
     restart: unless-stopped
