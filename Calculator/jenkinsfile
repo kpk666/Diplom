@@ -17,12 +17,13 @@ pipeline {
     environment {        
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
-        GITHUB_TOKEN = credentials('github_PAT')
+        GITHUB_TOKEN = 'github_PAT'
         PROJECT_FOLDER_PATH = 'Calculator'   
         HOME_AGENT = '/home/jenkins'
         GITHUB_USER = "kpk666"
         GHCR_PATH = "ghcr.io/kpk666"
         TAG = "latest"
+        MAIL_BOX = 'kpk666@tut.by'
     }
     
     stages {
@@ -85,11 +86,21 @@ pipeline {
         stage('Push image') {
             when { expression { BRANCH_NAME == 'master'}}
             steps {
-                withCredentials([usernamePassword(credentialsId: DOCKER_CRED, passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin"
+                withCredentials([usernamePassword(credentialsId: GITHUB_TOKEN, passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "echo ${pass} | docker login ghcr.io -u ${user} --password-stdin"
                     sh "docker push ${FINAL_IMAGE_NAME}"
+                    // sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin"
+                    // sh "docker push ${FINAL_IMAGE_NAME}"
                 }
             }
+            post{
+                always{
+                    mail to: "${MAIL_BOX}",
+                    subject: "Jenkins - Create and push image",
+                    body: "Image of your application (${FINAL_IMAGE_NAME}) has been pushed to the GitHub packages (username - ${GITHUB_NAME_REPO}) !!!"
+                }
+            }
+        
         }
     }
 
