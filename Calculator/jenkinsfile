@@ -56,8 +56,6 @@ pipeline {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """                    
                     docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
-                    docker stop ${IMAGE_NAME}
-                    docker rmi ${CONTAINER_NAME}
                     """
                 }
             }
