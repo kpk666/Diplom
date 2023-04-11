@@ -20,7 +20,7 @@ pipeline {
         GITHUB_TOKEN = credentials('github_PAT')
         PROJECT_FOLDER_PATH = 'Calculator'   
         HOME_AGENT = '/home/jenkins'
-        GITHUB_USER = credentials('gh_user')
+        GITHUB_USER = "kpk666"
         GHCR_PATH = "ghcr.io/kpk666"
         TAG = "latest"
     }
