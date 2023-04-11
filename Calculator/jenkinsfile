@@ -61,6 +61,7 @@ pipeline {
                     """
                 }
             }
+        }
         //     post {
         //         always {
         //             dir(APP_PATH) {
@@ -94,11 +95,11 @@ pipeline {
         }
     }
 
-        post { 
-            always { 
-                cleanWs()
-            }
-        }
+        // post { 
+        //     always { 
+        //         cleanWs()
+        //     }
+        // }
     }
 }
 
