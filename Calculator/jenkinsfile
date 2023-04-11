@@ -14,44 +14,117 @@ pipeline {
         ansiColor('xtrem')
     }
 
-    environment {
-        DOCKERCOMPOSE_HOME = tool name: 'dockercompose', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+    environment {        
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
         GITHUB_TOKEN = credentials('github_pat')
-        PROJECT_FOLDER_PATH = 'Calculator'
-        PROJECT_DOCKER_FOLDER_PATH = 'deploy'
+        PROJECT_FOLDER_PATH = 'Calculator'   
         HOME_AGENT = '/home/jenkins'
         GITHUB_USER = credentials('gh_user')
+        GHCR_PATH = "ghcr.io/kpk666"
+        TAG = "latest"
     }
-
+    
     stages {
-        stage('Create Dockerfile') {
+        stage('Prepare_image') {
             steps {
-                dir(PROJECT_FOLDER_PATH) {
-                    sh "docker build -t ghcr.io/kpk666/web-calculator:latest ."
+                script {
+                    println("BRANCH - ${BRANCH_NAME}")
+                    println("PRID - ${env.CHANGE_ID}")
+                    if (BRANCH_NAME == 'master') {
+                        TAG = 'latest'
+                    } else {
+                        TAG = env.CHANGE_ID
+                    }
+                    IMAGE_NAME = "web-calculator:${TAG}"
+                    FINAL_IMAGE_NAME = "${GHCR_PATH}/web-calculator:${TAG}"
+                    CONTAINER_NAME = "web-calculator"
                 }
             }
         }
 
-    stages {
-        stage('Create Dockerfile') {
+        stage('Build_image') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
-                    sh "docker build -t ghcr.io/kpk666/web-calculator:latest ."
+                    sh "docker build -t ${IMAGE_NAME} -f Dockerfile ."
                 }
             }
         }
 
-        stage('Push docker image to ghcr.io') {
+        stage('Test') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
-                    sh """
-                    echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin
-                    docker push ghcr.io/kpk666/web-calculator:latest
+                    sh """                    
+                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
+                    docker stop ${IMAGE_NAME}
+                    docker rmi ${CONTAINER_NAME}
                     """
                 }
             }
-        }      
+        //     post {
+        //         always {
+        //             dir(APP_PATH) {
+        //                 junit 'target/surefire-reports/*.xml'
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Create image') {
+            when { expression { BRANCH_NAME == 'master'}}
+            steps {
+                script {
+                    dir(PROJECT_FOLDER_PATH) {
+                        sh"""
+                        docker build -t ${FINAL_IMAGE_NAME} .
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Push image') {
+            when { expression { BRANCH_NAME == 'master'}}
+            steps {
+                withCredentials([usernamePassword(credentialsId: DOCKER_CRED, passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin"
+                    sh "docker push ${FINAL_IMAGE_NAME}"
+                }
+            }
+        }
+    }
+
+    post { 
+        always { 
+            cleanWs()
+        }
     }
 }
+
+
+    // stages {
+    //     stage('Create Dockerfile') {
+    //         steps {
+    //             dir(PROJECT_FOLDER_PATH) {
+    //                 sh "docker build -t ${GHCR_PATH}/web-calculator:latest ."
+    //             }
+    //         }
+    //     }
+
+        // stage('Test stage') {
+        //     steps {
+        //         dir(PROJECT_FOLDER_PATH) {
+        //             sh "docker run -t ${GHCR_PATH}/web-calculator:latest ."
+        //         }
+        //     }
+        // }
+
+        // stage('Push docker image to ghcr.io') {
+        //     steps {
+        //         dir(PROJECT_FOLDER_PATH) {
+        //             sh """
+        //             echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin
+        //             docker push ghcr.io/kpk666/web-calculator:latest
+        //             """
+        //         }
+        //     }
