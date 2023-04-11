@@ -97,7 +97,7 @@ pipeline {
                 always{
                     mail to: "${MAIL_BOX}",
                     subject: "Jenkins - Create and push image",
-                    body: "Image of your application (${FINAL_IMAGE_NAME}) has been pushed to the GitHub packages (username - ${GITHUB_NAME_REPO}) !!!"
+                    body: "Image of your application (${FINAL_IMAGE_NAME}) has been pushed to the GitHub packages (username - ${GITHUB_USER}) !!!"
                 }
             }
         
