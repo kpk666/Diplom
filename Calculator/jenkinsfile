@@ -17,7 +17,7 @@ pipeline {
     environment {        
         AWS_ACCESS_KEY_ID = credentials('accessKey')
         AWS_SECRET_ACCESS_KEY = credentials('secretKey')
-        GITHUB_TOKEN = credentials('github_pat')
+        GITHUB_TOKEN = credentials('github_PAT')
         PROJECT_FOLDER_PATH = 'Calculator'   
         HOME_AGENT = '/home/jenkins'
         GITHUB_USER = credentials('gh_user')
