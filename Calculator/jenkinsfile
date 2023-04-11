@@ -22,8 +22,17 @@ pipeline {
         PROJECT_FOLDER_PATH = 'Calculator'
         PROJECT_DOCKER_FOLDER_PATH = 'deploy'
         HOME_AGENT = '/home/jenkins'
-        GITHUB_USER = 'kpk666'
+        GITHUB_USER = credentials('gh_user')
     }
+
+    stages {
+        stage('Create Dockerfile') {
+            steps {
+                dir(PROJECT_FOLDER_PATH) {
+                    sh "docker build -t ghcr.io/kpk666/web-calculator:latest ."
+                }
+            }
+        }
 
     stages {
         stage('Create Dockerfile') {
@@ -38,7 +47,7 @@ pipeline {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """
-                    echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB} --password-stdin
+                    echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin
                     docker push ghcr.io/kpk666/web-calculator:latest
                     """
                 }
