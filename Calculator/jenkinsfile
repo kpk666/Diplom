@@ -92,15 +92,7 @@ pipeline {
                     // sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin"
                     // sh "docker push ${FINAL_IMAGE_NAME}"
                 }
-            }
-            post{
-                always{
-                    mail to: "${MAIL_BOX}",
-                    subject: "Jenkins - Create and push image",
-                    body: "Image of your application (${FINAL_IMAGE_NAME}) has been pushed to the GitHub packages (username - ${GITHUB_USER}) !!!"
-                }
-            }
-        
+            }        
         }
     }
 
