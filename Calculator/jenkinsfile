@@ -55,8 +55,9 @@ pipeline {
         stage('Test_image') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
-                    sh """                    
-                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "node /var/www/html/script.js"
+                    sh """
+                    set +e                    
+                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "node /var/www/html/script.js > ./log.txt && cat ./log.txt"
                     """
                 }
             }
@@ -89,7 +90,7 @@ pipeline {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """                    
-                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
+                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "node /var/www/html/script.js > ./log.txt && cat ./log.txt"
                     """
                 }
             }
