@@ -84,6 +84,7 @@ pipeline {
         }
 
         stage('Test_image_for_master') {
+            when { expression { BRANCH_NAME == 'master'}}
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """                    
