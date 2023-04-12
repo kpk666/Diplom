@@ -66,14 +66,14 @@ pipeline {
                 }
             }
 
-            post {
-                success {
-                    telegramSend(message: "${CONTAINER_NAME} successfully passed tests", chatId:1336300466)
-                }
-                failure {                    
-                    telegramSend(message: "${CONTAINER_NAME} did not pass tests", chatId:1336300466)
-                }
-            }
+            // post {
+            //     success {
+            //         telegramSend(message: "${CONTAINER_NAME} successfully passed tests", chatId:1336300466)
+            //     }
+            //     failure {                    
+            //         telegramSend(message: "${CONTAINER_NAME} did not pass tests", chatId:1336300466)
+            //     }
+            // }
         }
 
         stage('Create image') {
