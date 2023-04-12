@@ -51,7 +51,7 @@ pipeline {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """
-                    set +e                    
+                    [ -d logs] || rmdir logs                                      
                     docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 2> logs/log.txt"
                     docker cp ${CONTAINER_NAME}:/logs/ logs/
                     docker rm -f ${CONTAINER_NAME}
