@@ -30,7 +30,7 @@ pipeline {
         stage('Prepare_image') {
             steps {
                 script {
-                    println("BRANCH - ${BRANCH_NAME}")
+                    println("BRANCH - ${env.BRANCH_NAME}")
                     println("PRID - ${env.CHANGE_ID}")
                     if (BRANCH_NAME == 'master') {
                         TAG = 'latest'
@@ -52,7 +52,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Test_image') {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """                    
@@ -83,14 +83,22 @@ pipeline {
             }
         }
 
+        stage('Test_image_for_master') {
+            steps {
+                dir(PROJECT_FOLDER_PATH) {
+                    sh """                    
+                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
+                    """
+                }
+            }
+        }
+
         stage('Push image') {
             when { expression { BRANCH_NAME == 'master'}}
             steps {
                 withCredentials([usernamePassword(credentialsId: GITHUB_TOKEN, passwordVariable: 'pass', usernameVariable: 'user')]) {
                     sh "echo ${pass} | docker login ghcr.io -u ${user} --password-stdin"
                     sh "docker push ${FINAL_IMAGE_NAME}"
-                    // sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin"
-                    // sh "docker push ${FINAL_IMAGE_NAME}"
                 }
             }        
         }
@@ -102,31 +110,3 @@ pipeline {
         //     }
         // }
 }
-
-
-    // stages {
-    //     stage('Create Dockerfile') {
-    //         steps {
-    //             dir(PROJECT_FOLDER_PATH) {
-    //                 sh "docker build -t ${GHCR_PATH}/web-calculator:latest ."
-    //             }
-    //         }
-    //     }
-
-        // stage('Test stage') {
-        //     steps {
-        //         dir(PROJECT_FOLDER_PATH) {
-        //             sh "docker run -t ${GHCR_PATH}/web-calculator:latest ."
-        //         }
-        //     }
-        // }
-
-        // stage('Push docker image to ghcr.io') {
-        //     steps {
-        //         dir(PROJECT_FOLDER_PATH) {
-        //             sh """
-        //             echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_USER} --password-stdin
-        //             docker push ghcr.io/kpk666/web-calculator:latest
-        //             """
-        //         }
-        //     }
