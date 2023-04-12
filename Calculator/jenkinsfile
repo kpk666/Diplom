@@ -1,11 +1,6 @@
 pipeline {
 
-    // agent { label "jenkins-agent" }
     agent { label 'master' }
-
-    // tools {
-    //     dockerTool 'docker'
-    // }
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -23,7 +18,7 @@ pipeline {
         GITHUB_USER = "kpk666"
         GHCR_PATH = "ghcr.io/kpk666"
         TAG = "latest"
-        MAIL_BOX = 'kpk666@tut.by'
+
     }
     
     stages {
@@ -63,22 +58,13 @@ pipeline {
             }
             post {
                 success {
-                    telegramSend(message: "${CONTAINER_NAME} successfully passed tests")
+                    telegramSend(message: "${CONTAINER_NAME} successfully passed tests", chatId:1336300466)
                 }
                 failure {                    
-                    telegramSend(message: "${CONTAINER_NAME} did not pass tests")
+                    telegramSend(message: "${CONTAINER_NAME} did not pass tests", chatId:1336300466)
                 }
             }
         }
-        // docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
-        //     post {
-        //         always {
-        //             dir(APP_PATH) {
-        //                 junit 'target/surefire-reports/*.xml'
-        //             }
-        //         }
-        //     }
-        // }
 
         stage('Create image') {
             when { expression { BRANCH_NAME == 'master'}}
@@ -114,10 +100,4 @@ pipeline {
             }        
         }
     }
-
-        // post { 
-        //     always { 
-        //         cleanWs()
-        //     }
-        // }
 }
