@@ -56,12 +56,12 @@ pipeline {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """                    
-                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
                     docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "node /var/www/html/script.js"
                     """
                 }
             }
         }
+        // docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
         //     post {
         //         always {
         //             dir(APP_PATH) {
