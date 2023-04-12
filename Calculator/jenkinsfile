@@ -52,7 +52,7 @@ pipeline {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """
                     set +e                                      
-                    docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 2> logs/log.txt"
+                    docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 2> logs/log.xml"
                     docker cp ${CONTAINER_NAME}:/logs/ logs/
                     docker rm -f ${CONTAINER_NAME}
                     """
@@ -61,7 +61,7 @@ pipeline {
             post{
                 always{
                     dir(PROJECT_FOLDER_PATH){
-                        junit 'logs/*.txt'
+                        junit 'logs/*.xml'
                     }
                 }
             }
