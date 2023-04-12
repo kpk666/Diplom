@@ -52,10 +52,20 @@ pipeline {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """
                     set +e                    
-                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "node /var/www/html/script.js > ./log.txt && cat ./log.txt"
+                    docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js > logs/log.txt"
+                    docker cp ${CONTAINER_NAME}:/logs/ logs/
+                    docker rm -f
                     """
                 }
             }
+            post{
+                always{
+                    dir(PROJECT_FOLDER_PATH){
+                        junit 'logs/*.txt'
+                    }
+                }
+            }
+
             post {
                 success {
                     telegramSend(message: "${CONTAINER_NAME} successfully passed tests", chatId:1336300466)
@@ -100,4 +110,9 @@ pipeline {
             }        
         }
     }
+    post { 
+        always { 
+            cleanWs()
+        }
+    }    
 }
