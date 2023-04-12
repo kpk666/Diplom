@@ -51,7 +51,7 @@ pipeline {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """
-                    set +e                                      
+                    set -e                                      
                     docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 1>logs/log.txt 2>> logs/log.txt"
                     docker cp ${CONTAINER_NAME}:/logs/ logs/
                     cat logs/log.txt
@@ -88,8 +88,12 @@ pipeline {
             steps {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """                    
-                    docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "node /var/www/html/script.js > ./log.txt && cat ./log.txt"
-                    """
+                    set -e                                      
+                    docker run --name ${CONTAINER_NAME} ${FINAL_IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 1>logs/log.txt 2>> logs/log.txt"
+                    docker cp ${CONTAINER_NAME}:/logs/ logs/
+                    cat logs/log.txt
+                    docker rm -f ${CONTAINER_NAME}
+                    """                    
                 }
             }
         }
