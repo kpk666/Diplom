@@ -69,6 +69,7 @@ pipeline {
                     telegramSend(message: "${CONTAINER_NAME} did not pass tests")
                 }
             }
+        }
         // docker run --name ${CONTAINER_NAME} -d --rm ${IMAGE_NAME} sh -c "cat /var/www/html/index.html"
         //     post {
         //         always {
