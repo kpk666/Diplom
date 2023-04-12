@@ -52,28 +52,22 @@ pipeline {
                 dir(PROJECT_FOLDER_PATH) {
                     sh """
                     set +e                                      
-                    docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 2> logs/log.xml"
+                    docker run --name ${CONTAINER_NAME} ${IMAGE_NAME} sh -c "mkdir logs && node /var/www/html/script.js 1>logs/log.txt 2>> logs/log.txt"
                     docker cp ${CONTAINER_NAME}:/logs/ logs/
+                    cat logs/log.txt
                     docker rm -f ${CONTAINER_NAME}
                     """
                 }
             }
-            post{
-                always{
-                    dir(PROJECT_FOLDER_PATH){
-                        junit 'logs/*.xml'
-                    }
+
+            post {
+                success {
+                    telegramSend(message: "${CONTAINER_NAME} successfully passed tests", chatId:1336300466)
+                }
+                failure {                    
+                    telegramSend(message: "${CONTAINER_NAME} did not pass tests", chatId:1336300466)
                 }
             }
-
-            // post {
-            //     success {
-            //         telegramSend(message: "${CONTAINER_NAME} successfully passed tests", chatId:1336300466)
-            //     }
-            //     failure {                    
-            //         telegramSend(message: "${CONTAINER_NAME} did not pass tests", chatId:1336300466)
-            //     }
-            // }
         }
 
         stage('Create image') {
