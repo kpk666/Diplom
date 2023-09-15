@@ -20,10 +20,9 @@ jobs:
       run: |
         # Здесь можете провести тестирование вашего кода, если необходимо
         echo "Testing code"
-        echo "${{ secrets.DOCKER_USERNAME }}"
         
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
+      uses: docker/login-action@v1
       with:
           registry: ghcr.io
           username: $USER
