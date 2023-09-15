@@ -4,9 +4,9 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-# env:
-#   USER: ${{ secrets.DOCKER_USERNAME }}
-#   TOKEN: ${{ secrets.DOCKER_PASSWORD }}
+env:
+  USER: ${{ secrets.DOCKER_USERNAME }}
+  TOKEN: ${{ secrets.DOCKER_PASSWORD }}
   
 jobs:
   build:
@@ -22,11 +22,11 @@ jobs:
         echo "Testing code"
         
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1
+      uses: docker/login-action@v3
       with:
           registry: ghcr.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ env.USER }}
+          password: ${{ env.TOKEN }}
 
     - name: Build Docker image
       working-directory: Calculator
