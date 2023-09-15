@@ -1,0 +1,42 @@
+name: CI calculator
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: Ryzen5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and test
+      run: |
+        # Здесь можете провести тестирование вашего кода, если необходимо
+        echo "Testing code"
+
+    - name: Build Docker image
+      working-directory: Calculator
+      run: |
+        docker build -t ghcr.io/kpk666/web-calculator:latest .
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker push ghcr.io/kpk666/web-calculator:latest
+
+  deploy:
+    needs: build
+    runs-on: Ryzen5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy with Docker Compose
+      working-directory: deploy
+      run: |
+        docker-compose pull
+        docker-compose up -d --force-recreate
+
+  
