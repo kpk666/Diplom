@@ -4,9 +4,9 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-env:
-  USER: ${{ secrets.DOCKER_USERNAME }}
-  TOKEN: ${{ secrets.DOCKER_PASSWORD }}
+# env:
+#   USER: ${{ secrets.DOCKER_USERNAME }}
+#   TOKEN: ${{ secrets.DOCKER_PASSWORD }}
   
 jobs:
   build:
@@ -25,8 +25,8 @@ jobs:
       uses: docker/login-action@v1
       with:
           registry: ghcr.io
-          username: $USER
-          password: $TOKEN
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
       working-directory: Calculator
