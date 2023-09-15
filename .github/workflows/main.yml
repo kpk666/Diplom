@@ -25,7 +25,7 @@ jobs:
       working-directory: Calculator
       run: |
         docker build -t ghcr.io/kpk666/web-calculator:latest .
-        docker login ghcr.io -u kpk666 -p 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
+        docker login ghcr.io -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         docker push ghcr.io/kpk666/web-calculator:latest
 
   deploy:
