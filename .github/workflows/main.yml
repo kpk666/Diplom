@@ -4,7 +4,10 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  
 jobs:
   build:
     runs-on: self-hosted
@@ -17,14 +20,12 @@ jobs:
       run: |
         # Здесь можете провести тестирование вашего кода, если необходимо
         echo "Testing code"
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        
     - name: Build Docker image
       working-directory: Calculator
       run: |
         docker build -t ghcr.io/kpk666/web-calculator:latest .
-        docker login ghcr.io -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker login ghcr.io -u kpk666 -p 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
         docker push ghcr.io/kpk666/web-calculator:latest
 
   deploy:
