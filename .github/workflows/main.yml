@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: Ryzen5
+    runs-on: wsl-runner
 
     steps:
     - name: Checkout code
@@ -27,7 +27,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: Ryzen5
+    runs-on: wsl-runner
 
     steps:
     - name: Checkout code
