@@ -5,8 +5,8 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  DOCKER_USERNAME: ${{ USER }}
-  DOCKER_PASSWORD: ${{ TOKEN }}
+  DOCKER_USERNAME: $USER
+  DOCKER_PASSWORD: $TOKEN
   
 jobs:
   build:
