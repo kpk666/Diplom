@@ -21,11 +21,15 @@ jobs:
         # Здесь можете провести тестирование вашего кода, если необходимо
         echo "Testing code"
         
+    - name: Login to github
+      run: |
+        export CR_PAT=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
+        echo $CR_PAT | docker login ghcr.io -u kpk666 --password-stdin
+        
     - name: Build Docker image
       working-directory: Calculator
       run: |
         docker build -t ghcr.io/kpk666/web-calculator:latest .
-        docker login ghcr.io -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         docker push ghcr.io/kpk666/web-calculator:latest
 
   deploy:
