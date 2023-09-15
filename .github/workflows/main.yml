@@ -5,8 +5,8 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKER_USERNAME: ${{ variable.USER }}
+  DOCKER_PASSWORD: ${{ variable.TOKEN }}
   
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
     - name: Login to github
       run: |
         export CR_PAT=$DOCKER_PASSWORD
-        echo $CR_PAT | docker login ghcr.io -u kpk666 --password-stdin
+        echo $CR_PAT | docker login ghcr.io -u $DOCKER_USERNAME --password-stdin
         
     - name: Build Docker image
       working-directory: Calculator
