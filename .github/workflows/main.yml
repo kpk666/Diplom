@@ -23,7 +23,7 @@ jobs:
         
     - name: Login to github
       run: |
-        export CR_PAT=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
+        export CR_PAT=$DOCKER_PASSWORD
         echo $CR_PAT | docker login ghcr.io -u kpk666 --password-stdin
         
     - name: Build Docker image
