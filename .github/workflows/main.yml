@@ -17,16 +17,14 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
-        run: npm install htmlhint@latest eslint@latest eslint-plugin-html@latest
+        run: npm install htmlhint@latest eslint@latest eslint-plugin-html@latest npm init @eslint/config
         
       - name: Testing HTML code
         run: |
-          # Здесь можете провести тестирование вашего кода, если необходимо
           npx htmlhint '**/*.html'    
           
       - name: Testing java.script code
         run: |
-          # Здесь можете провести тестирование вашего кода, если необходимо
           npx eslint '**/*.js'
 
     
