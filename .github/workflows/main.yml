@@ -22,17 +22,18 @@ jobs:
       - name: Testing HTML code
         run: |
           # Здесь можете провести тестирование вашего кода, если необходимо
-          run: npx htmlhint '**/*.html'    
+          npx htmlhint '**/*.html'    
           
       - name: Testing java.script code
         run: |
           # Здесь можете провести тестирование вашего кода, если необходимо
-          run: npx eslint '**/*.js'
+          npx eslint '**/*.js'
 
     
   build:
     runs-on: self-hosted
-
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    needs: test
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -52,9 +53,9 @@ jobs:
         docker push ghcr.io/kpk666/web-calculator:latest
 
   deploy:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
     needs: build
-    runs-on: self-hosted
-
+    runs-on: self-hosted    
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
