@@ -28,7 +28,7 @@ jobs:
           npx htmlhint '**/*.html'    
           echo "Testing of HTML is complited"
           
-      - name: Testing java.script code
+      - name: Testing java.scripts code
         run: |
           echo "Starting to launch java.script testing"
           echo "initialize init @eslint/config -y"
