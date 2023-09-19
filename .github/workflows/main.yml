@@ -20,7 +20,7 @@ jobs:
         run: |
           npm init -y
           npm install htmlhint@latest eslint@latest eslint-plugin-html@latest           
-          npm init @eslint/config -y
+          
         
       - name: Testing HTML code
         run: |
@@ -28,6 +28,7 @@ jobs:
           
       - name: Testing java.script code
         run: |
+          npm init @eslint/config -y
           npx eslint '**/*.js'
 
     
