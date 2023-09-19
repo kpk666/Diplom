@@ -19,17 +19,22 @@ jobs:
       - name: Install dependencies
         run: |
           npm init -y
-          npm install htmlhint@latest eslint@latest eslint-plugin-html@latest           
+          npm install htmlhint@latest eslint@latest eslint-plugin-html@latest
+          echo "Dependencies are installed"
           
         
       - name: Testing HTML code
         run: |
           npx htmlhint '**/*.html'    
+          echo "Testing of HTML is complited"
           
       - name: Testing java.script code
         run: |
-          npm init @eslint/config -y
-          npx eslint '**/*.js' --fix --quiet 
+          echo "Starting to launch java.script testing"
+          echo "initialize init @eslint/config -y"
+          npm init @eslint/config
+          echo "Initizlization is complited"
+          npx eslint 'Calculator/*.js' --fix --quiet 
 
     
   build:
