@@ -22,12 +22,9 @@ pipeline {
               sh 'docker rm nginx_jenkins'
             } else {
               echo "Container nginx_jenkins not found."
-            }        
+            }
+            sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
           }
-      }
-        script {
-          sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
-        }
       }
     }
   }
