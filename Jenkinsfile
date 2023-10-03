@@ -14,18 +14,22 @@ pipeline {
     }
     stage(deploy) {
       steps {
-        script1 {         
-          def containerExists = sh(script: 'docker ps -a --filter "name=nginx_jenkins" --quiet', returnStatus: true) == 0
-          if (containerExists) {
-            echo "Container nginx_jenkins exists. Stopping and removing..."
-            sh 'docker stop nginx_jenkins'
-            sh 'docker rm nginx_jenkins'
-          } else {
-            echo "Container nginx_jenkins not found."
-          }        
+        step1 {
+          script {         
+            def containerExists = sh(script: 'docker ps -a --filter "name=nginx_jenkins" --quiet', returnStatus: true) == 0
+            if (containerExists) {
+              echo "Container nginx_jenkins exists. Stopping and removing..."
+              sh 'docker stop nginx_jenkins'
+              sh 'docker rm nginx_jenkins'
+            } else {
+              echo "Container nginx_jenkins not found."
+            }        
+          }
         }
-        script2 {
-          sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
+        step2 {
+          script {
+            sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
+          }
         }
       }
     }
