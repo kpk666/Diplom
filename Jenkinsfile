@@ -23,6 +23,9 @@ pipeline {
             } else {
               echo "Container nginx_jenkins not found."
             }
+            pwd
+            whoami
+            cat /etc/os-release
             sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
           }
       }
