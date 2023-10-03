@@ -14,7 +14,6 @@ pipeline {
     }
     stage(deploy) {
       steps {
-        step1 {
           script {         
             def containerExists = sh(script: 'docker ps -a --filter "name=nginx_jenkins" --quiet', returnStatus: true) == 0
             if (containerExists) {
@@ -25,11 +24,9 @@ pipeline {
               echo "Container nginx_jenkins not found."
             }        
           }
-        }
-        step2 {
-          script {
-            sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
-          }
+      }
+        script {
+          sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
         }
       }
     }
