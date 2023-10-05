@@ -15,7 +15,7 @@ pipeline {
     stage(deploy) {
       steps {
           script {         
-            def containerExists = sh(script: 'docker ps -a --filter "name=nginx_jenkins" --quiet', returnStatus: true) == 0
+            def containerExists = sh(script: 'docker ps -q -f name="nginx_jenkins"', returnStatus: true) == 0
             if (containerExists) {
               echo "Container nginx_jenkins exists. Stopping and removing..."
               sh 'docker stop nginx_jenkins'
