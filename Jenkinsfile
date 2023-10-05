@@ -24,7 +24,7 @@ pipeline {
             } else {
                 echo "Container ${containerName} does not exist."
             }
-            sh 'docker run --name nginx_jenkins -d -p 8085:80 nginx:1.23'
+            sh(script: "docker run -d --name ${containerName} -p 80:80 nginx", returnStatus: true)
           }
       }
     }
