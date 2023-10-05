@@ -16,11 +16,11 @@ pipeline {
       steps {
           script {
             def containerName = 'nginx_jenkins'
-            def containerExists = sh(script: "docker ps -q -f name=${containerName}", returnStatus: true) == 0
+            def containerExists = sh(script: "docker inspect -f '{{.State.Running}}' ${containerName}", returnStatus: true) == 0
             if (containerExists) {
               echo "Container ${containerName} exists. Stopping and removing..."
-              sh "docker stop ${containerName}"
-              sh "docker rm ${containerName}"
+              sh "docker stop ${containerName}" || true
+              sh "docker rm ${containerName}" || true
             } else {
                 echo "Container ${containerName} does not exist."
             }
