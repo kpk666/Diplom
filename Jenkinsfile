@@ -14,18 +14,16 @@ pipeline {
     }
     stage(deploy) {
       steps {
-          script {         
-            def containerExists = sh(script: 'docker ps -q -f name="nginx_jenkins"', returnStatus: true) == 0
+          script {
+            def containerName = 'nginx_jenkins'
+            def containerExists = sh(script: "docker ps -q -f name=${containerName}", returnStatus: true) == 0
             if (containerExists) {
-              echo "Container nginx_jenkins exists. Stopping and removing..."
-              sh 'docker stop nginx_jenkins'
-              sh 'docker rm nginx_jenkins'
+              echo "Container ${containerName} exists. Stopping and removing..."
+              sh "docker stop ${containerName}"
+              sh "docker rm ${containerName}"
             } else {
-              echo "Container nginx_jenkins not found."
+                echo "Container ${containerName} does not exist."
             }
-            sh 'pwd'
-            sh 'whoami'
-            sh 'cat /etc/os-release'
             sh 'docker run --name nginx_jenkins -d -p 8085:80 nginx:1.23'
           }
       }
