@@ -26,7 +26,7 @@ pipeline {
             sh 'pwd'
             sh 'whoami'
             sh 'cat /etc/os-release'
-            sh 'docker run --name nginx_jenkins -d -p 8080:80 nginx:1.23'
+            sh 'docker run --name nginx_jenkins -d -p 8085:80 nginx:1.23'
           }
       }
     }
