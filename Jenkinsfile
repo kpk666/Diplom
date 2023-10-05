@@ -19,12 +19,12 @@ pipeline {
             def containerExists = sh(script: "docker inspect -f '{{.State.Running}}' ${containerName}", returnStatus: true) == 0
             if (containerExists) {
               echo "Container ${containerName} exists. Stopping and removing..."
-              sh "docker stop ${containerName}" || true
-              sh "docker rm ${containerName}" || true
+              sh "docker stop ${containerName}"
+              sh "docker rm ${containerName}"
             } else {
                 echo "Container ${containerName} does not exist."
             }
-            sh(script: "docker run -d --name ${containerName} -p 80:80 nginx", returnStatus: true)
+            sh "docker run -d --name ${containerName} -p 8085:80 nginx:1.23"
           }
       }
     }
