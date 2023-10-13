@@ -11,7 +11,7 @@ pipeline {
     stage(build) {
       steps {
         script{
-          sh 'docker build -t ghcr.io/kpk666/web-calculator:latest -f Calculator/Dockerfile'
+          sh 'docker build -t ghcr.io/kpk666/web-calculator:latest -f Calculator/Dockerfile .'
           sh 'docker push ghcr.io/kpk666/web-calculator:latest'
         }        
       }
