@@ -4,27 +4,23 @@ pipeline {
   stages {
     stage(test) {
       steps {
-        echo "Testing is implemented here"
+        sh 'npm install -g htmlhint'
+        sh 'htmlhint Calculator/index.html'
       }
     }
     stage(build) {
       steps {
-        echo "Building is implemented here"
+        script{
+          sh 'docker build -t ghcr.io/kpk666/web-calculator:latest -f Calculator/Dockerfile'
+          sh 'docker push ghcr.io/kpk666/web-calculator:latest'
+        }        
       }
     }
     stage(deploy) {
       steps {
           script {
-            def containerName = 'nginx_jenkins'
-            def containerExists = sh(script: "docker inspect -f '{{.State.Running}}' ${containerName}", returnStatus: true) == 0
-            if (containerExists) {
-              echo "Container ${containerName} exists. Stopping and removing..."
-              sh "docker stop ${containerName}"
-              sh "docker rm ${containerName}"
-            } else {
-                echo "Container ${containerName} does not exist."
-            }
-            sh "docker run -d --name ${containerName} -p 8085:80 nginx:1.23"
+            sh 'docker-compose -f deploy/docker-compose.yaml pull'
+            sh 'docker-compose -f deploy/docker-compose.yaml up -d --force-recreate'
           }
       }
     }
