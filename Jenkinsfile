@@ -4,8 +4,8 @@ pipeline {
   stages {
     stage(test) {
       steps {
-        sh 'npm install -g htmlhint'
-        sh 'htmlhint Calculator/index.html'
+        sh 'sudo npm install -g htmlhint'
+        sh 'sudo htmlhint Calculator/index.html'
       }
     }
     stage(build) {
